@@ -3,7 +3,8 @@
 /*  03-03-2021   Michelle Petit		created db and first 4 tables		*/                                  
 /*  03-05-2021	Michelle Petit		created remaining tables for db		*/
 /*	03-13-2021	Michelle Petit		added data to all the tables		*/
-/*							                                            */		
+/*	03-19-2021	Michelle Petit		added t-sql queries for database,   */
+/*							              and created a view            */		
 /************************************************************************/
 
 --best practice
@@ -195,7 +196,7 @@ update Media
 --adding values to the Borrower table (20 rows) 
 insert into Borrower
 	(LastName, FirstName, PhoneNum)
-	values	('Nielson', 'Michelle', '555-555-5550'),
+	values	('Nielson', 'Michelle', '555-555-5550'), --changed last 1/2 digits in the phone numbers so they are all unique
 			('Nielson', 'Anna', '555-555-5551'),
 			('Nielson', 'Beth', '555-555-5552'),
 			('Nielson', 'Wes', '555-555-5553'),
@@ -216,13 +217,13 @@ insert into Borrower
 			('Nielson', 'Duke', '555-555-5568'),
 			('Nielson', 'Lenny', '555-555-5569');
 
---check that all 20 entries were created
+--query to check that all 20 entries were created
 select * from borrower
 	order by FirstName;
 --delete 1 row from the Borrower table
 delete from borrower
 	where FirstName = 'Lenny';
---check that there are now 19 rows
+--query to check that there are now 19 rows
 select * from borrower
 	order by FirstName;
 
@@ -243,9 +244,9 @@ insert into ArtistType
 insert into Artist
 	(FirstName, LastName, ArtistTypeID)
 	values	('Mannheim Steamroller', null, 4),
-			('Anna Maria', 'Mendieta', 2),
+			('Anna Maria', 'Mendieta', 1),
 			('Mormon Tabernacle Choir', null, 5),
-			('The Backyardigans', null, 1),
+			('The Backyardigans', null, 3),
 			('Enfamil', null, 8),
 			('Mardi Gras Records', null, 8),
 			('Orpheus Chamber Orchestra', null, 4),
@@ -274,28 +275,30 @@ insert into DiskHasBorrower
 	values	('02/15/2021', '02/28/2021', '02/27/2021', 5, 5);
 
 --add current borrow values (19 rows)
+------changed first 2 values on every row to default so dates generate correctly now
 insert into DiskHasBorrower
 	(BorrowedDate, DueDate, ReturnedDate, BorrowerID, MediaID)
-	values	('','', null, 3,2), --borrowerIDs = 1 and 2 do not have anything checked out; MediaID = 1 has never been checked out
-			('','', null, 3,3),
-			('','', null, 4,4),
-			('','', null, 5,5), --BorrowerID = 5 borrowed MediaID = 5 twice
-			('','', null, 6,6),
-			('','', null, 7,7),
-			('','', null, 8,8),
-			('','', null, 9,9),
-			('','', null, 10,10),
-			('','', null, 11,11),
-			('','', null, 12,12),
-			('','', null, 13,13),
-			('','', null, 14,14),
-			('','', null, 15,15),
-			('','', null, 16,16),
-			('','', null, 17,17),
-			('','', null, 18,18),
-			('','', null, 19,19),
-			('','', null, 19,20); --BorrowID = 19 has 2 Media items checked out
+	values	(default,default, null, 3,2), --borrowerIDs = 1 and 2 do not have anything checked out; MediaID = 1 has never been checked out
+			(default,default, null, 3,3),
+			(default,default, null, 4,4),
+			(default,default, null, 5,5), --BorrowerID = 5 borrowed MediaID = 5 twice
+			(default,default, null, 6,6),
+			(default,default, null, 7,7),
+			(default,default, null, 8,8),
+			(default,default, null, 9,9),
+			(default,default, null, 10,10),
+			(default,default, null, 11,11),
+			(default,default, null, 12,12),
+			(default,default, null, 13,13),
+			(default,default, null, 14,14),
+			(default,default, null, 15,15),
+			(default,default, null, 16,16),
+			(default,default, null, 17,17),
+			(default,default, null, 18,18),
+			(default,default, null, 19,19),
+			(default,default, null, 19,20); --BorrowID = 19 has 2 Media items checked out
 
+--query to show all the media that have a borrower
 select * from DiskHasBorrower;  --20 rows
 
 ----add 20 rows of data to the MediaArtist table----
@@ -326,10 +329,68 @@ insert into MediaArtist
 			(22,21), --MediaID = 22 has 2 artists
 			(22,22);
 			
---list of all media items that are on loan
+--query to show a list of all media items that are on loan
 select BorrowerID, MediaID, BorrowedDate, ReturnedDate
 from DiskHasBorrower
 	where ReturnedDate is null
 	order by BorrowerID;
 
---added new line to DiskHasBorrower in class 3/15/2021
+--query to show the disks in the database with any associated artists
+select Title as 'Disk Name', ReleaseDate, isnull(FirstName, ' ') as 'Artist First Name', isnull(LastName, ' ') as 'Artist Last Name'
+from Media
+	join MediaArtist on Media.mediaID = mediaArtist.MediaID
+	join Artist on Artist.ArtistID = mediaArtist.artistID
+order by 'Artist Last Name', 'Artist First Name';
+go 
+
+--creating a view that only shows individual artist's names
+create view View_Individual_Artist as
+	select ArtistID, FirstName, LastName
+	from Artist
+	where ArtistTypeID = 1;
+go
+
+--query to show view (minus ArtistID)
+select FirstName, isnull(LastName, ' ')
+from View_Individual_Artist
+order by LastName; 
+
+--query to show the disks in the database that have associated Group artists
+select title as 'Disk Name', ReleaseDate as 'Release Date', FirstName as 'Group Name'
+from Media
+	join MediaArtist on Media.mediaID = mediaArtist.MediaID
+	join Artist on Artist.ArtistID = mediaArtist.artistID
+where ArtistTypeID > 2
+order by 'Group Name';
+
+--query that re-writes the previous query using the View_Individual_Artist view
+select title as 'Disk Name', ReleaseDate as 'Release Date', FirstName as 'Group Name'
+from Media
+	join MediaArtist on Media.mediaID = mediaArtist.MediaID
+	join Artist on Artist.ArtistID = mediaArtist.artistID
+where Artist.ArtistID not in (select ArtistID from View_Individual_Artist)	--subquery using view table
+	and Artist.ArtistTypeID > 2 --Jenny said it was ok to use a second restriction
+order by 'Group Name';
+
+--query to show the borrowed disks and who borrowed them
+select FirstName as First, LastName as Last, Title as 'Disk Name', BorrowedDate as 'Borrowed Date', ReturnedDate as 'Returned Date'
+from DiskHasBorrower
+	join Borrower on DiskHasBorrower.BorrowerID = Borrower.BorrowerID
+	join Media on DiskHasBorrower.MediaID = Media.MediaID
+order by 2, 1, 3, 4;
+
+--query to show the number of times a disk has been borrowed
+select DiskHasBorrower.MediaID as DiskId, Title as DiskName, 
+		count(DiskHasBorrower.MediaID) as TimesBorrowed
+from DiskHasBorrower
+	join Media on DiskHasBorrower.MediaID = Media.MediaID 
+group by DiskHasBorrower.MediaID, Title
+order by DiskId; 
+
+--query to show the disks outstanding or on-loan and who has each disk
+select Title as 'Disk Name', BorrowedDate as Borrowed, ReturnedDate as Returned, LastName as 'Last Name'
+from DiskHasBorrower
+	join Media on DiskHasBorrower.MediaID = Media.MediaID 
+	join Borrower on DiskHasBorrower.BorrowerID = Borrower.BorrowerID
+where ReturnedDate is null
+order by 1;

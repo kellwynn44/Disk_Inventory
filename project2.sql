@@ -1,10 +1,11 @@
 /************************************************************************/
 /*   Date         Programmer        Description						    */
-/*  03-03-2021   Michelle Petit		created db and first 4 tables		*/                                  
+/*  03-03-2021   Michelle Petit		created db and first 4 tables		*/                       
 /*  03-05-2021	Michelle Petit		created remaining tables for db		*/
 /*	03-13-2021	Michelle Petit		added data to all the tables		*/
 /*	03-19-2021	Michelle Petit		added t-sql queries for database,   */
-/*							              and created a view            */		
+/*							              and created a view            */	
+/*	03-31-2021	Michelle Petit		added stored procedures for user    */
 /************************************************************************/
 
 --best practice
@@ -31,6 +32,7 @@ create user diskUserMP;
 alter role db_datareader add member diskUserMP;
 go
 
+		/***** CREATING THE DATABASE'S TABLES *****/
 --create borrower table with 4 required columns
 create table Borrower
 	(BorrowerID int not null identity primary key,
@@ -103,7 +105,7 @@ create table MediaArtist
 	unique(MediaID, ArtistID)
 	);
 
-
+		/**** ADDING VALUES TO TABLES *****/
 ----add 20 rows of data to Media table (need to add data to 3 other tables first)----
 --adding values to the LoanStatus table (5 rows)
 insert into LoanStatus
@@ -328,7 +330,8 @@ insert into MediaArtist
 			(21,14), --ArtistID = 14 (Enya) has 2 media items
 			(22,21), --MediaID = 22 has 2 artists
 			(22,22);
-			
+	
+	/***** DATABASE QUERIES *****/
 --query to show a list of all media items that are on loan
 select BorrowerID, MediaID, BorrowedDate, ReturnedDate
 from DiskHasBorrower
@@ -394,3 +397,262 @@ from DiskHasBorrower
 	join Borrower on DiskHasBorrower.BorrowerID = Borrower.BorrowerID
 where ReturnedDate is null
 order by 1;
+
+			/****** STORED PROCEDURES FOR DATABASE *****/
+/*****STORED PROCEDURES FOR ARTIST TABLE*****/
+--create INSERT stored procedure for the Artist table 
+drop proc if exists sp_insert_artist;
+go
+create proc sp_insert_artist
+	@firstName varchar(60), @lastName varchar(60), @artistTypeID int
+as
+	begin try
+	--insert a new row into the artist table using the input parameters
+		insert into Artist (FirstName, LastName, ArtistTypeID)
+				values	(@firstName, @lastName, @artistTypeID)
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+
+--Give the user execute permission to use the Artist table's INSERT stored procedure
+grant execute on sp_insert_artist to diskUserMP;
+go
+--execute statements testing stored procedure
+exec sp_insert_artist 'Martha', 'Hamilton', 1
+go
+exec sp_insert_artist 'Martha', 'Hamilton', NULL
+go
+
+--create UPDATE stored procedure for the Artist table
+drop proc if exists sp_update_artist;
+go
+
+create proc sp_update_artist
+	@artistID int, @firstName varchar(60), @lastName varchar(60), @artistTypeID int
+as
+	--update the artist table using the input parameters
+	begin try
+		update Artist
+				set FirstName = @firstName, 
+					LastName = @lastName, 
+					ArtistTypeID = @artistTypeID
+		where ArtistID = @artistID;
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+
+--Give the user execute permission to use the Artist table's UPDATE stored procedure
+grant execute on sp_update_artist to diskUserMP;
+go
+
+--execute statements testing stored procedure
+exec sp_update_artist 23, 'Martha', 'Stewart', 1
+go
+exec sp_update_artist 23, 'Martha', 'Stewart', NULL
+go
+
+--create DELETE stored procedure for the Artist table
+drop proc if exists sp_delete_artist;
+go
+
+create proc sp_delete_artist
+			@artistID int
+as
+	--delete a row from the artist table using the input parameter
+	begin try
+		delete from Artist
+			   where ArtistID = @artistID;
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+--Give the user execute permission to media table DELETE stored procedure
+grant execute on sp_delete_artist to diskUserMP;
+go
+
+--execute statements testing stored procedure
+exec sp_delete_artist 23
+go
+exec sp_delete_artist 1
+go
+
+/*****STORED PROCEDURES FOR BORROWER TABLE*****/
+--create INSERT stored procedure for the Borrower table 
+drop proc if exists sp_insert_borrower;
+go
+create proc sp_insert_borrower
+	@lastName varchar(60), @firstName varchar(60), @phoneNum varchar(15)
+as
+	begin try
+	--insert a new row into the borrower table using the input parameters
+		insert into Borrower (LastName, FirstName, PhoneNum)
+				values	(@lastName, @firstName, @phoneNum)
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+
+--Give the user execute permission to use the Borrower table's INSERT stored procedure
+grant execute on sp_insert_borrower to diskUserMP;
+go
+--execute statements testing stored procedure
+exec sp_insert_borrower 'Hamilton', 'Martha', '208-555-0505'
+go
+exec sp_insert_borrower'Hamilton', 'Martha', NULL
+go
+
+--create UPDATE stored procedure for the Borrower table
+drop proc if exists sp_update_borrower;
+go
+
+create proc sp_update_borrower
+	@borrowerID int, @lastName varchar(60), @firstName varchar(60), @phoneNum varchar(15)
+as
+	--update the borrower table using the input parameters
+	begin try
+		update Borrower
+				set LastName = @lastName, 
+					FirstName = @firstName, 
+					PhoneNum = @phoneNum
+		where BorrowerID = @borrowerID;
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+
+--Give the user execute permission to use the Borrower table's UPDATE stored procedure
+grant execute on sp_update_borrower to diskUserMP;
+go
+
+--execute statements testing stored procedure
+exec sp_update_borrower 21, 'Stewart', 'Martha', '208-555-0505' 
+go
+exec sp_update_borrower 21, 'Stewart', 'Martha', NULL
+go
+
+--create DELETE stored procedure for the Borrower table
+drop proc if exists sp_delete_borrower;
+go
+
+create proc sp_delete_borrower
+			@borrowerID int
+as
+	--delete a row from the Borrower table using the input parameter
+	begin try
+		delete from Borrower
+			   where BorrowerID = @borrowerID;
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+--Give the user execute permission to Borrower table DELETE stored procedure
+grant execute on sp_delete_borrower to diskUserMP;
+go
+
+--execute statements testing stored procedure
+exec sp_delete_borrower 21
+go
+exec sp_delete_borrower 3
+go
+
+/*****STORED PROCEDURES FOR MEDIA TABLE*****/
+--create INSERT stored procedure for the Media table 
+drop proc if exists sp_insert_media;
+go
+
+create proc sp_insert_media
+	@title varchar(60), @releaseDate date, @genreID int, @mediaTypeID int, @loanStatusID int
+as
+	--insert a new row into the media table using the input parameters
+	begin try
+		insert into Media (Title, ReleaseDate, GenreID, MediaTypeID, LoanStatusID)
+				values	(@title, @releaseDate, @genreID, @mediaTypeID, @loanStatusID)
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+
+--Give the user execute permission to media INSERT stored procedure
+grant execute on sp_insert_media to diskUserMP;
+go
+--execute statements testing stored procedure
+exec sp_insert_media 'Lightning Bolt', '2-2-2018', 1, 1, 1
+go
+exec sp_insert_media NULL, '2-2-2018', 1, 1, 1
+go
+
+--create UPDATE stored procedure for the Media table
+drop proc if exists sp_update_media;
+go
+
+create proc sp_update_media
+	@mediaID int, @title varchar(60), @releaseDate date, @genreID int, @mediaTypeID int, @loanStatusID int
+as
+	--update the media table using the input parameters
+	begin try
+		update Media 
+				set Title = @title,
+					ReleaseDate = @releaseDate, 
+					GenreID = @genreID, 
+					MediaTypeID = @mediaTypeID, 
+					LoanStatusID = @loanStatusID
+		where MediaID = @mediaID;
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+
+--Give the user execute permission to media UPDATE stored procedure
+grant execute on sp_update_media to diskUserMP;
+go
+
+--execute statements testing stored procedure
+exec sp_update_media 23, 'Lightning Bolt', '2-20-2018', 1, 1, 1
+go
+exec sp_update_media 23, NULL, '2-2-2018', 1, 1, 1
+go
+
+--create DELETE stored procedure for the Media table
+drop proc if exists sp_delete_media;
+go
+
+create proc sp_delete_media
+	@mediaID int
+as
+	--delete a row from the media table using the input parameter
+	begin try
+		delete from Media
+			   where MediaID = @mediaID;
+	end try
+	begin catch
+		print 'An error occured.';
+		print 'Message: ' + convert(varchar(200), error_message());
+	end catch
+go
+--Give the user execute permission to media table DELETE stored procedure
+grant execute on sp_delete_media to diskUserMP;
+go
+
+--execute statements testing stored procedure
+exec sp_delete_media 23
+go
+exec sp_delete_media 1
+go

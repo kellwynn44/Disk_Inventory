@@ -421,9 +421,9 @@ go
 grant execute on sp_insert_artist to diskUserMP;
 go
 --execute statements testing stored procedure
-exec sp_insert_artist 'Martha', 'Hamilton', 1
+exec sp_insert_artist 'Martha', 'Hamilton', 1		--works
 go
-exec sp_insert_artist 'Martha', 'Hamilton', NULL
+exec sp_insert_artist 'Martha', 'Hamilton', NULL	--throws error
 go
 
 --create UPDATE stored procedure for the Artist table
@@ -452,9 +452,9 @@ grant execute on sp_update_artist to diskUserMP;
 go
 
 --execute statements testing stored procedure
-exec sp_update_artist 23, 'Martha', 'Stewart', 1
+exec sp_update_artist 23, 'Martha', 'Stewart', 1	--works
 go
-exec sp_update_artist 23, 'Martha', 'Stewart', NULL
+exec sp_update_artist 23, 'Martha', 'Stewart', NULL	--throws error
 go
 
 --create DELETE stored procedure for the Artist table
@@ -479,9 +479,9 @@ grant execute on sp_delete_artist to diskUserMP;
 go
 
 --execute statements testing stored procedure
-exec sp_delete_artist 23
+exec sp_delete_artist 23	--works
 go
-exec sp_delete_artist 1
+exec sp_delete_artist 1		--throws error
 go
 
 /*****STORED PROCEDURES FOR BORROWER TABLE*****/
@@ -506,9 +506,9 @@ go
 grant execute on sp_insert_borrower to diskUserMP;
 go
 --execute statements testing stored procedure
-exec sp_insert_borrower 'Hamilton', 'Martha', '208-555-0505'
+exec sp_insert_borrower 'Hamilton', 'Martha', '208-555-0505'	--works
 go
-exec sp_insert_borrower'Hamilton', 'Martha', NULL
+exec sp_insert_borrower'Hamilton', 'Martha', NULL				--throws error
 go
 
 --create UPDATE stored procedure for the Borrower table
@@ -537,9 +537,9 @@ grant execute on sp_update_borrower to diskUserMP;
 go
 
 --execute statements testing stored procedure
-exec sp_update_borrower 21, 'Stewart', 'Martha', '208-555-0505' 
+exec sp_update_borrower 21, 'Stewart', 'Martha', '208-555-0505'		--works
 go
-exec sp_update_borrower 21, 'Stewart', 'Martha', NULL
+exec sp_update_borrower 21, 'Stewart', 'Martha', NULL				--throws error
 go
 
 --create DELETE stored procedure for the Borrower table
@@ -564,10 +564,10 @@ grant execute on sp_delete_borrower to diskUserMP;
 go
 
 --execute statements testing stored procedure
-exec sp_delete_borrower 21
+exec sp_delete_borrower 21	--works
 go
-exec sp_delete_borrower 3
-go
+exec sp_delete_borrower 3	--throws error
+go	
 
 /*****STORED PROCEDURES FOR MEDIA TABLE*****/
 --create INSERT stored procedure for the Media table 
@@ -592,9 +592,9 @@ go
 grant execute on sp_insert_media to diskUserMP;
 go
 --execute statements testing stored procedure
-exec sp_insert_media 'Lightning Bolt', '2-2-2018', 1, 1, 1
+exec sp_insert_media 'Lightning Bolt', '2-2-2018', 1, 1, 1	--works
 go
-exec sp_insert_media NULL, '2-2-2018', 1, 1, 1
+exec sp_insert_media NULL, '2-2-2018', 1, 1, 1				--throws error
 go
 
 --create UPDATE stored procedure for the Media table
@@ -625,9 +625,9 @@ grant execute on sp_update_media to diskUserMP;
 go
 
 --execute statements testing stored procedure
-exec sp_update_media 23, 'Lightning Bolt', '2-20-2018', 1, 1, 1
+exec sp_update_media 23, 'Lightning Bolt', '2-20-2018', 1, 1, 1	--works
 go
-exec sp_update_media 23, NULL, '2-2-2018', 1, 1, 1
+exec sp_update_media 23, NULL, '2-2-2018', 1, 1, 1				--throws error
 go
 
 --create DELETE stored procedure for the Media table
@@ -652,7 +652,7 @@ grant execute on sp_delete_media to diskUserMP;
 go
 
 --execute statements testing stored procedure
-exec sp_delete_media 23
+exec sp_delete_media 23	--works
 go
-exec sp_delete_media 1
+exec sp_delete_media 1	--throws error
 go

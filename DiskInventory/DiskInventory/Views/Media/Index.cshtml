@@ -1,0 +1,28 @@
+﻿@model List<Medium>
+
+@{
+    ViewData["Title"] = "Media Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Media Information</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr><th>Media ID</th><th>Title</th><th>Release Date</th><th>Genre ID</th><th>Media Type ID</th><th>Loan Status ID</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var media in Model)
+            {
+                <tr>
+                    <td>@media.MediaId</td>
+                    <td>@media.Title</td>
+                    <td>@media.ReleaseDate</td>
+                    <td>@media.GenreId</td>
+                    <td>@media.MediaTypeId</td>
+                    <td>@media.LoanStatusId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

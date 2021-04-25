@@ -1,0 +1,62 @@
+﻿@model Medium
+@{
+    string title = ViewBag.Action + " Media";
+    ViewBag.Title = title;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReleaseDate">Release Date</label>
+        <input asp-for="ReleaseDate" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="GenreId">Genre</label>
+        <select asp-for="GenreId" class="form-control">
+            <option value="">Select a genre</option>
+            @foreach (Genre g in ViewBag.Genres)
+            {
+                <option value="@g.GenreId">@g.Description</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="LoanStatusId">Media's Loan Status</label>
+        <select asp-for="LoanStatusId" class="form-control">
+            <option value="">Select a loan status</option>
+            @foreach (LoanStatus s in ViewBag.LoanStatuses)
+            {
+                <option value="@s.LoanStatusId">@s.Description</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="MediaTypeId">Media Type</label>
+        <select asp-for="MediaTypeId" class="form-control">
+            <option value="">Select a media type</option>
+            @foreach (MediaType t in ViewBag.MediaTypes)
+            {
+                <option value="@t.MediaTypeId">@t.Description</option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <input type="hidden" asp-for="MediaId" />
+
+    <button type="submit" class="btn btn-primary">@ViewBag.Action</button>&nbsp;
+    <a asp-controller="Media" asp-action="Index"
+       class="btn btn-primary">Cancel</a>
+</form>

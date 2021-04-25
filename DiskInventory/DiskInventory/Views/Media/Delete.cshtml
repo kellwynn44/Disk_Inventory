@@ -1,0 +1,21 @@
+﻿@model Medium
+@{
+    ViewBag.Title = "Delete Media";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+
+<h3>Please confirm that you want to delete:</h3>
+<br />
+<h5>@Model.Title</h5>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="MediaId" />
+
+    <button type="submit" class="btn btn-primary">Delete Media</button>&nbsp;
+    <a asp-controller="Media" asp-action="Index"
+       class="btn btn-primary">Cancel</a>
+
+</form>

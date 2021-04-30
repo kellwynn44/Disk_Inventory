@@ -1,0 +1,21 @@
+﻿@model DiskHasBorrower
+@{
+    ViewBag.Title = "Delete Checkout";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+
+<h3>Please confirm that you want to delete the checkout for:</h3>
+<br />
+<h5>@Model.Media.Title</h5>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="DiskHasBorrowerId" />
+
+    <button type="submit" class="btn btn-primary">Delete Checkout</button>&nbsp;
+    <a asp-controller="DiskHasBorrower" asp-action="Index"
+       class="btn btn-primary">Cancel</a>
+
+</form>

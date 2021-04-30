@@ -67,20 +67,5 @@ namespace DiskInventory.Controllers
                 return View(diskHasBorrower);
             }
         }
-
-        //[HttpGet]
-        //public IActionResult Delete(int id)
-        //{
-        //    var diskHasBorrower = context.DiskHasBorrowers.Find(id);
-        //    return View(diskHasBorrower);
-        //}
-
-        //[HttpPost]
-        //public IActionResult Delete(DiskHasBorrower diskHasBorrower)
-        //{
-        //    context.DiskHasBorrowers.Remove(diskHasBorrower);
-        //    context.SaveChanges();
-        //    return RedirectToAction("Index", "DiskHasBorrower");
-        //}
     }
 }

@@ -18,7 +18,8 @@ namespace DiskInventory.Controllers
         }
         public IActionResult Index()
         {
-            var artists = context.Artists.OrderBy(a => a.LastName).ThenBy(a => a.FirstName).ToList();
+            //var artists = context.Artists.OrderBy(a => a.LastName).ThenBy(a => a.FirstName).ToList();
+            var artists = context.Artists.OrderBy(a => a.LastName).ThenBy(a => a.FirstName).Include(t => t.ArtistType).ToList();
             return View(artists);
         }
 
@@ -45,10 +46,24 @@ namespace DiskInventory.Controllers
             if (ModelState.IsValid)
             {
                 if (artist.ArtistId == 0)
-                    context.Artists.Add(artist);
+                {
+                    //context.Artists.Add(artist);
+                    //new code to use stored procedure
+                    context.Database.ExecuteSqlRaw("execute sp_insert_artist @p0, @p1, @p2",
+                        parameters: new[] {artist.FirstName, artist.LastName,
+                        artist.ArtistTypeId.ToString()});
+                }
+
                 else
-                    context.Artists.Update(artist);
-                context.SaveChanges();
+                {
+                    //context.Artists.Update(artist);
+                    //new code to use stored procedure
+                    context.Database.ExecuteSqlRaw("execute sp_update_artist @p0, @p1, @p2, @p3",
+                      parameters: new[] {artist.ArtistId.ToString(), artist.FirstName, artist.LastName,
+                        artist.ArtistTypeId.ToString()});
+                }
+                    
+                //context.SaveChanges();
                 return RedirectToAction("Index", "Artist");
             }
             else
@@ -69,8 +84,12 @@ namespace DiskInventory.Controllers
         [HttpPost]
         public IActionResult Delete(Artist artist)
         {
-            context.Artists.Remove(artist);
-            context.SaveChanges();
+            //context.Artists.Remove(artist);
+            //new code for stored procedure
+            context.Database.ExecuteSqlRaw("execute sp_delete_artist @p0",
+                      parameters: new[] {artist.ArtistId.ToString()});
+
+            //context.SaveChanges();
             return RedirectToAction("Index", "Artist");
         }
     }

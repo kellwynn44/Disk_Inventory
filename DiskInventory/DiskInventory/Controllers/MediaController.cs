@@ -18,7 +18,10 @@ namespace DiskInventory.Controllers
         }
         public IActionResult Index()
         {
-            var mediaItems = context.Media.OrderBy(m => m.Title).ToList();
+            //var mediaItems = context.Media.OrderBy(m => m.Title).ToList();
+            var mediaItems = context.Media.OrderBy(m => m.Title)
+                .Include(g => g.Genre).Include(t => t.MediaType)
+                .Include(s =>s.LoanStatus).ToList();
             return View(mediaItems);
         }
 
@@ -53,10 +56,26 @@ namespace DiskInventory.Controllers
             if (ModelState.IsValid)
             {
                 if (media.MediaId == 0)
-                    context.Media.Add(media);
+                {
+                    //context.Media.Add(media);
+                    //new code for stored procedure
+                    context.Database.ExecuteSqlRaw("execute sp_insert_media @p0, @p1, @p2, @p3, @p4",
+                        parameters: new[] {media.Title, media.ReleaseDate.ToString(), 
+                        media.GenreId.ToString(), media.MediaTypeId.ToString(), 
+                            media.LoanStatusId.ToString()});
+                }
+
                 else
-                    context.Media.Update(media);
-                context.SaveChanges();
+                {
+                    //context.Media.Update(media);
+                    //new code for stored procedure
+                    context.Database.ExecuteSqlRaw("execute sp_update_media @p0, @p1, @p2, @p3, @p4, @p5",
+                        parameters: new[] {media.MediaId.ToString(), media.Title, media.ReleaseDate.ToString(),
+                        media.GenreId.ToString(), media.MediaTypeId.ToString(),
+                            media.LoanStatusId.ToString()});
+                }
+                    
+                //context.SaveChanges();
                 return RedirectToAction("Index", "Media");
             }
             else
@@ -80,8 +99,12 @@ namespace DiskInventory.Controllers
         [HttpPost]
         public IActionResult Delete(Medium media)
         {
-            context.Media.Remove(media);
-            context.SaveChanges();
+            //context.Media.Remove(media);
+            //new code for stored procedure
+            context.Database.ExecuteSqlRaw("execute sp_delete_media @p0",
+                      parameters: new[] {media.MediaId.ToString()});
+
+            //context.SaveChanges();
             return RedirectToAction("Index", "Media");
         }
     }

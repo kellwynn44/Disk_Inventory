@@ -52,9 +52,15 @@ namespace DiskInventory.Controllers
             if (ModelState.IsValid)
             {
                 if (diskHasBorrower.DiskHasBorrowerId == 0)
+                {
                     context.DiskHasBorrowers.Add(diskHasBorrower);
+                }
+
                 else
+                {
                     context.DiskHasBorrowers.Update(diskHasBorrower);
+                }
+                    
                 context.SaveChanges();
                 return RedirectToAction("Index", "DiskHasBorrower");
             }

@@ -11,23 +11,26 @@
 
     <table class="table table-bordered table-striped">
         <thead>
-            <tr><th>Media ID</th><th>Title</th><th>Release Date</th><th>Genre ID</th><th>Media Type ID</th><th>Loan Status ID</th><th></th></tr>
+            <tr><th>Media ID</th><th>Title</th><th>Release Date</th><th>Genre</th><th>Media Type</th><th>Loan Status</th><th></th></tr>
         </thead>
         <tbody>
             @foreach (var media in Model)
             {
-                <tr>
-                    <td>@media.MediaId</td>
-                    <td>@media.Title</td>
-                    <td>@media.ReleaseDate.ToShortDateString()</td>
-                    <td>@media.GenreId</td>
-                    <td>@media.MediaTypeId</td>
-                    <td>@media.LoanStatusId</td>
-                    <td>
-                        <a asp-controller="Media" asp-action="Edit" asp-route-id="@media.MediaId">Edit</a>
-                        <a asp-controller="Media" asp-action="Delete" asp-route-id="@media.MediaId">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>@media.MediaId</td>
+                <td>@media.Title</td>
+                <td>@media.ReleaseDate.ToShortDateString()</td>
+                @*<td>@media.GenreId</td>
+                  <td>@media.MediaTypeId</td>
+                  <td>@media.LoanStatusId</td>*@
+                <td>@media.Genre.Description</td>
+                <td>@media.MediaType.Description</td>
+                <td>@media.LoanStatus.Description</td>
+                <td>
+                    <a asp-controller="Media" asp-action="Edit" asp-route-id="@media.MediaId">Edit</a>
+                    <a asp-controller="Media" asp-action="Delete" asp-route-id="@media.MediaId">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

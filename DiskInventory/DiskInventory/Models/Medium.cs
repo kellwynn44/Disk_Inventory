@@ -30,6 +30,7 @@ namespace DiskInventory.Models
         [Required]
         public int? LoanStatusId { get; set; }
 
+        //virtual pointers
         public virtual Genre Genre { get; set; }
         public virtual LoanStatus LoanStatus { get; set; }
         public virtual MediaType MediaType { get; set; }

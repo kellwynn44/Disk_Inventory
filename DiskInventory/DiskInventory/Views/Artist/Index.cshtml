@@ -7,7 +7,7 @@
 <div class="text-center">
     <h1 class="display-4">Artist List</h1>
     <br />
-    <h4><a asp-controller="Artist" asp-action="Add">Add an Artist</a></h4>
+    <h4><a asp-controller="Artist" asp-action="Add"  class="btn btn-info">Add an Artist</a></h4>
 
         <table class="table table-bordered table-striped">
             <thead>
@@ -22,10 +22,10 @@
                         <td>@artist.LastName</td>
                         <td>@artist.ArtistType.Description</td>
                         <td>
-                            <a asp-controller="Artist" asp-action="Edit" asp-route-id="@artist.ArtistId">
+                            <a asp-controller="Artist" asp-action="Edit" asp-route-id="@artist.ArtistId"  class="btn btn-info">
                                Edit</a>
                             &nbsp;&nbsp;
-                            <a asp-controller="Artist" asp-action="Delete" asp-route-id="@artist.ArtistId">
+                            <a asp-controller="Artist" asp-action="Delete" asp-route-id="@artist.ArtistId"  class="btn btn-outline-info">
                                Delete</a>
                         </td>
                     </tr>

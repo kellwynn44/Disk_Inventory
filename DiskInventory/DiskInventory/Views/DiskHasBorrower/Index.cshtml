@@ -7,7 +7,7 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <br />
-    <h4><a asp-controller="DiskHasBorrower" asp-action="Add">Add a Checkout</a></h4>
+    <h4><a asp-controller="DiskHasBorrower" asp-action="Add" class="btn btn-info">Add a Checkout</a></h4>
 
     <table class="table table-bordered table-striped">
         <thead>
@@ -24,7 +24,7 @@
                     <td>@diskHasBorrower.DueDate.ToShortDateString()</td>
                     <td>@diskHasBorrower.ReturnedDate?.ToShortDateString()</td>
                     <td>
-                        <a asp-controller="DiskHasBorrower" asp-action="Edit" asp-route-id="@diskHasBorrower.DiskHasBorrowerId">Edit</a>
+                        <a asp-controller="DiskHasBorrower" asp-action="Edit" asp-route-id="@diskHasBorrower.DiskHasBorrowerId" class="btn btn-info">Edit</a>
                         @*<a asp-controller="DiskHasBorrower" asp-action="Delete" asp-route-id="@diskHasBorrower.DiskHasBorrowerId">Delete</a>*@
                     </td>
                 </tr>

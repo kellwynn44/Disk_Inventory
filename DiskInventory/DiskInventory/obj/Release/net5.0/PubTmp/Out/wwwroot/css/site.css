@@ -7,6 +7,9 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.nav-item {
+    margin-right: 1rem;
+}
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
@@ -59,9 +62,9 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  background-color:antiquewhite;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: white;
 }
 .footer {
   position: absolute;

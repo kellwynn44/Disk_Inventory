@@ -7,7 +7,7 @@
 <div class="text-center">
     <h1 class="display-4">Borrowers</h1>
     <br />
-    <h4><a asp-controller="Borrower" asp-action="Add">Add a Borrower</a></h4>
+    <h4><a asp-controller="Borrower" asp-action="Add" class="btn btn-info">Add a Borrower</a></h4>
 
     <table class="table table-bordered table-striped">
         <thead>
@@ -22,11 +22,11 @@
                     <td>@borrower.LastName</td>
                     <td>@borrower.PhoneNum</td>
                     <td>
-                        <a asp-controller="Borrower" asp-action="Edit" asp-route-id="@borrower.BorrowerId">
+                        <a asp-controller="Borrower" asp-action="Edit" asp-route-id="@borrower.BorrowerId" class="btn btn-info">
                             Edit
                         </a>
                         &nbsp;&nbsp;
-                        <a asp-controller="Borrower" asp-action="Delete" asp-route-id="@borrower.BorrowerId">
+                        <a asp-controller="Borrower" asp-action="Delete" asp-route-id="@borrower.BorrowerId" class="btn btn-outline-info">
                             Delete
                         </a>
                     </td>

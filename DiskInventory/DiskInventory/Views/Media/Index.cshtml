@@ -7,7 +7,7 @@
 <div class="text-center">
     <h1 class="display-4">Media Information</h1>
     <br />
-    <h4><a asp-controller="Media" asp-action="Add" class="btn btn-info">Add Media</a></h4>
+    <h4><a asp-controller="Media" asp-action="Add" class="btn btn-success">Add Media</a></h4>
 
     <table class="table table-bordered table-striped">
         <thead>
@@ -27,8 +27,8 @@
                 <td>@media.MediaType.Description</td>
                 <td>@media.LoanStatus.Description</td>
                 <td>
-                    <a asp-controller="Media" asp-action="Edit" asp-route-id="@media.MediaId" class="btn btn-info">Edit</a>
-                    <a asp-controller="Media" asp-action="Delete" asp-route-id="@media.MediaId" class="btn btn-outline-info">Delete</a>
+                    <a asp-controller="Media" asp-action="Edit" asp-route-id="@media.MediaId" class="btn btn-success">Edit</a>
+                    <a asp-controller="Media" asp-action="Delete" asp-route-id="@media.MediaId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
             }

@@ -24,8 +24,8 @@ namespace DiskInventory.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter an artist type.")]
-        public int ArtistTypeId { get; set; }
-        
+        public int? ArtistTypeId { get; set; }
+
         public virtual ArtistType ArtistType { get; set; }
 
         public virtual ICollection<MediaArtist> MediaArtists { get; set; }

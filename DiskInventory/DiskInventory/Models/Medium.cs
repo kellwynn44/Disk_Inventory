@@ -23,12 +23,14 @@ namespace DiskInventory.Models
         [Required(ErrorMessage ="Please enter a date.")]
         public DateTime ReleaseDate { get; set; }
 
-        [Required]
-        public int GenreId { get; set; }
-        [Required]
-        public int MediaTypeId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter the genre.")]
+        public int? GenreId { get; set; }
+
+        [Required(ErrorMessage = "Please enter a loan status.")]
         public int? LoanStatusId { get; set; }
+
+        [Required(ErrorMessage = "Please enter the type of media.")]
+        public int? MediaTypeId { get; set; }
 
         //virtual pointers
         public virtual Genre Genre { get; set; }

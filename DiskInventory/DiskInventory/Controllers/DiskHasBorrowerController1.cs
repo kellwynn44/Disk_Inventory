@@ -33,7 +33,7 @@ namespace DiskInventory.Controllers
 
             DiskHasBorrower newDiskHasBorrower = new DiskHasBorrower();
             newDiskHasBorrower.BorrowedDate = DateTime.Today;
-            newDiskHasBorrower.DueDate = DateTime.Today;
+            newDiskHasBorrower.DueDate = DateTime.Today.AddDays(30);  //added 30 days to current date
             return View("Edit", newDiskHasBorrower);
         }
         [HttpGet]

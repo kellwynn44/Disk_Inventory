@@ -17,11 +17,11 @@ namespace DiskInventory.Models
         public DateTime DueDate { get; set; }
         public DateTime? ReturnedDate { get; set; }
 
-        [Required(ErrorMessage = "Please select a borrower.")]
-        public int BorrowerId { get; set; }
-
         [Required(ErrorMessage = "Please select a title.")]
-        public int MediaId { get; set; }
+        public int? MediaId { get; set; }
+
+        [Required(ErrorMessage = "Please select a borrower.")]
+        public int? BorrowerId { get; set; }
 
         public virtual Borrower Borrower { get; set; }
         public virtual Medium Media { get; set; }

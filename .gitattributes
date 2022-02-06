@@ -1,0 +1,2 @@
+#ignore js in favor of C#
+*.js linguist-detectable=false
